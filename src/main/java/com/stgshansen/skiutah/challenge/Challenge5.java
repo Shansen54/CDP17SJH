@@ -1,70 +1,78 @@
 package com.stgshansen.skiutah.challenge;
 
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 
 public class Challenge5 {
 
 	public static void main(String[] args) {
-
+			
+		String WhatToSearchFor = "Lodging";
+		String ByResort = "Nordic Valley";
+		String SubCategory = "Condo";
 	
 	    System.setProperty("webdriver.gecko.driver", "C:/Dev/Tools/geckodriver.exe");
 	    FirefoxDriver driver = new FirefoxDriver();
+	    
 //		Opening SkiUtah.com
 	    driver.get("https://www.skiutah.com/members/listing");
-/**		
-		//		setting the menu items to click on.
-	    final By TOPNAV = By.xpath("//a[contains(.,'Plan Your Trip')]");
-	    final By SUBNAV = By.linkText("Compare Resorts");
-	    
-//		Wait for page to get totally loaded.
-        try {
-//		Find the Plan Your Trip menu item.
-        WebElement hoverMenuItem = driver.findElement(TOPNAV);
-        	System.out.println("Trying to click on Plan Your Trip");
-                try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-//		Create an Action
-                Actions action = new Actions(driver);
-                try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-//		Hover over Plan Your Trip                
-                action.moveToElement(hoverMenuItem).perform();
-                try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-//		Submenu should be visible, so click on Compare Resorts menu item.
-                WebElement subElement = driver.findElement(SUBNAV);
-                subElement.click();
-	    		System.out.println("Clicked to go to Compare Resorts page");
+
+	    // Inputting the first option of what to search for.
+	    Select drpSearchForWhat = new Select(driver.findElementByName("filter-category-select"));
+// 		System.out.println("Got Activation of the Search for What input field");
 
         try {
-			Thread.sleep(4000);
-//	   		WebElement resort = driver.findElementByPartialLinkText(skiPlace);
-//	  		System.out.println((resort.getText()));
-//	   		WebElement miles = resort.findElement(By.className("ResortComparison-value"));
-//	   		System.out.println("The resort " + (skiPlace) + " is " + (miles.getText()) +" miles from the closest airport." );
-	 		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
- 
-  		
-        }
-        finally{;
+			Thread.sleep(1000);
+	  		System.out.println("Searching for - " + WhatToSearchFor);
+        	drpSearchForWhat.selectByVisibleText(WhatToSearchFor);
+	        } catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+//		Inputting the sub category.
+	    Select drpSearchForSubCat = new Select(driver.findElementByName("filter-sub-category-select"));
+// 		System.out.println("Got Activation of the Search for Sub Catagory input field");
+
+        try {
+			Thread.sleep(1000);
+	  		System.out.println("Using Sub Category - " + SubCategory);
+        	drpSearchForSubCat.selectByVisibleText(SubCategory);
+	        } catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+//		Inputting by resort.
+	    Select drpSearchByResort = new Select(driver.findElementByName("filter-resort-select"));
+// 		System.out.println("Got Activation of the Search By Resort input field");
+
+        try {
+			Thread.sleep(1000);
+	  		System.out.println("And Filtering by this resort: " + ByResort);
+        	drpSearchByResort.selectByVisibleText(ByResort);
+	        } catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+        
+//		Clicking the OK submit button.
+        WebElement okButton = driver.findElementByName("filter-form-submit");
+        okButton.click();
+         
+//		Listing of results.
+        try {
+			Thread.sleep(2000);
+			WebElement ListResults = driver.findElementByCssSelector(".ListingResults-count>h2");
+			String ListOutput = ListResults.getText();
+			System.out.println("The first " + ListOutput + " are shown below");
+	        } catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+        
    		//		Close the browser and test.
 	    driver.close();
- **/      
+	    
+        }
 	}
 	
-	}	
-	
+
 
 
 /** AUTOMATION CHALLENGE 5 (USE SEARCH AND GET INFO):
