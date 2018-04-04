@@ -1,5 +1,9 @@
 package com.stgshansen.skiutah.challenge;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
@@ -8,9 +12,9 @@ public class Challenge5 {
 
 	public static void main(String[] args) {
 			
-		String WhatToSearchFor = "Lodging";
+		String WhatToSearchFor = "Transportation";
+		String SubCategory = "Group Shuttles";
 		String ByResort = "Nordic Valley";
-		String SubCategory = "Condo";
 	
 	    System.setProperty("webdriver.gecko.driver", "C:/Dev/Tools/geckodriver.exe");
 	    FirefoxDriver driver = new FirefoxDriver();
@@ -31,7 +35,7 @@ public class Challenge5 {
 			}
 //		Inputting the sub category.
 	    Select drpSearchForSubCat = new Select(driver.findElementByName("filter-sub-category-select"));
-// 		System.out.println("Got Activation of the Search for Sub Catagory input field");
+// 		System.out.println("Got Activation of the Search for Sub Category input field");
 
         try {
 			Thread.sleep(1000);
@@ -61,7 +65,29 @@ public class Challenge5 {
 			Thread.sleep(2000);
 			WebElement ListResults = driver.findElementByCssSelector(".ListingResults-count>h2");
 			String ListOutput = ListResults.getText();
-			System.out.println("The first " + ListOutput + " are shown below");
+//			System.out.println(ListOutput);
+			String fileName = "SearchResponses.csv";
+			File file = new File(fileName);
+			try {
+				Scanner inputStream = new Scanner(file);
+				inputStream.useDelimiter(",");
+				while (inputStream.hasNext()) {
+					String data = inputStream.nextLine();
+					String[] fields = data.split(",");
+					if (fields[1].contains(ListOutput) & fields[0].contains(SubCategory)) {
+						System.out.println("You selected " + WhatToSearchFor + " along with " 
+					+ SubCategory + " and "+ ByResort +  " and got " +  ListOutput);
+					}
+				}
+				inputStream.close();
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+//			System.out.println("The first " + ListOutput + " are shown below");
 	        } catch (InterruptedException e) {
 				e.printStackTrace();
 			}
