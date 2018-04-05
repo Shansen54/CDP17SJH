@@ -82,7 +82,6 @@ public class Challenge5 {
 				inputStream.close();
 				
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
