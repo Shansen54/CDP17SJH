@@ -30,7 +30,7 @@ public class Challenge6 {
     static int index;
 	
 	public static void main(String[] args) throws Exception {
-	    System.setProperty("webdriver.gecko.driver", "src/geckodriver.exe");
+	    System.setProperty("webdriver.gecko.driver", "src\\geckodriver.exe");
 	    FirefoxDriver driver = new FirefoxDriver();
 	    //Opening SkiUtah.com
 	    driver.get(crawlingThisPage);
@@ -50,7 +50,6 @@ public class Challenge6 {
 			PriorityQueue<WebElement> linksOnPage, PriorityQueue<String> foundOnPage,
 			PriorityQueue<String> allValidUrls, PriorityQueue<String> alreadyCrawledUrls,
 			PriorityQueue<String> leftToCrawlUrls, HttpURLConnection huc, int respCode, FirefoxDriver driver) {
-		
 
 		// Find links on this page.
 		driver.get(crawlingThisPage);
@@ -123,7 +122,6 @@ public class Challenge6 {
     	crawlingThisPage = leftToCrawlUrls.poll();
 
 	}
-	
 
 }
 
