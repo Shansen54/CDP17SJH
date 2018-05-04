@@ -20,7 +20,8 @@ public class Challenge6 {
 	static WebElement webEle = null;
 	static List<WebElement> webEles;
 	static LinkedHashSet<WebElement> SortedList = new LinkedHashSet<WebElement>();
-    static int index;
+	static LinkedHashSet<String> SortedUrls = new LinkedHashSet<String>();
+	static int index = 0;
 	
 	@SuppressWarnings("unlikely-arg-type")
 	public static void main(String[] args) throws Exception {
@@ -31,35 +32,55 @@ public class Challenge6 {
 	    //Opening SkiUtah.com
 	    driver.get(homePage);
 	    foundOnPage.add(homePage);
- 
-	    while (foundOnPage != null) {
+	    SortedUrls.add(homePage);
+		alreadyCrawledUrls.add(homePage);
+
+		
+	    while (foundOnPage.size() <= SortedUrls.size() && SortedUrls.size() > 0) {
 	    	webEles = driver.findElements(By.tagName("a"));
-	    	webEle = webEles.get(index);
-			for(WebElement webEle : webEles) { SortedList.add(webEle);	}
-	    	webEles.removeAll(webEles);
-	    	webEles.addAll(SortedList);
-	    	webEles.remove(alreadyCrawledUrls);
-	    	
-	    	System.out.println("Total Links found on this crawled page -------------------------------------- " + webEles.size());
 			for(WebElement webEle : webEles) {	
 				if(webEle.getAttribute("href").contains("https://www.skiutah.com") && webEle.isDisplayed()) {
 					thisUrl = webEle.getAttribute("href");
-					System.out.println("Adding " + thisUrl + " to foundOnPage");
-					foundOnPage.add(thisUrl);
-					System.out.println("foundOnPage is now " + foundOnPage.size() + " size");
+//			    	System.out.println("thisUrl is --- " + thisUrl);
 				}
- 	    }
-	    	goToUrl(alreadyCrawledUrls, foundOnPage, webEle, wait, driver);
-	    }
-	    driver.close();
-	}
+				SortedUrls.add(thisUrl);
+			}
+	    	System.out.println("SortedUrls --- " + SortedUrls);
+			foundOnPage.addAll(SortedUrls);
+			SortedUrls.addAll(foundOnPage);
+			foundOnPage.removeAll(foundOnPage);
+			foundOnPage.addAll(SortedUrls);
+			
+	   
+	    foundOnPage.remove(homePage);
+	    SortedUrls.remove(homePage);
+    	System.out.println("SortedUrls --- " + SortedUrls);
+		System.out.println("Size of SortedUrls " + SortedUrls.size());
+		System.out.println("foundOnPage is now " + foundOnPage.size() + " size");
+		System.out.println("foundOnPage ******* " + foundOnPage);
+		foundOnPage.remove(alreadyCrawledUrls);
 
+		goToUrl(alreadyCrawledUrls, foundOnPage, wait, driver);
+		
+	    }	
+	    driver.close();
+	    	
+	 }
+
+
+
+	@SuppressWarnings("unlikely-arg-type")
 	private static void goToUrl(ArrayList<String> alreadyCrawledUrls, PriorityQueue<String> foundOnPage, 
-			WebElement webEle, WebDriverWait wait, FirefoxDriver driver) {
-//		for(WebElement webEle : driver.findElements(By.tagName("a"))) {	
+			WebDriverWait wait, FirefoxDriver driver) {
+//		if(webElement button)
+		for(WebElement webEle : driver.findElements(By.tagName("a"))) {	
 //			wait.until(driver.findElementsByTagName() isTrue)
+			foundOnPage.remove(alreadyCrawledUrls);
 			System.out.println("I am now going to this page - " + webEle.getAttribute("href"));
-//			if(webEle.getAttribute("href").contains("https://www.skiutah.com") && webEle.isDisplayed()) {
+			thisUrl = webEle.getAttribute("href");
+
+			if(webEle.getAttribute("href").contains("https://www.skiutah.com") && webEle.isDisplayed() 
+					&& !alreadyCrawledUrls.contains(thisUrl)) {
 				Actions action = new Actions(driver);
 				action.moveToElement(webEle).build().perform();
 				try {
@@ -67,7 +88,7 @@ public class Challenge6 {
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
-			
+
 //			if(!alreadyCrawledUrls.contains(webEle.getText()) && webEle.isDisplayed()){
 //				if(webEle.getAttribute("href").contains("https://www.skiutah.com")) {
 					alreadyCrawledUrls.add(webEle.getAttribute("href"));
@@ -79,12 +100,14 @@ public class Challenge6 {
 						e1.printStackTrace();
 					}
 				System.out.println("alreadyCrawledURLs has " + alreadyCrawledUrls.size() + " links in it." );
+				System.out.println(alreadyCrawledUrls);
 				foundOnPage.remove(thisUrl);
 				System.out.println("foundOnPage has " + foundOnPage.size() + " links in it." );
 				
+				return;
 				}
-	
-
+		}
+		}
 }
 
 /*	The queue is all the URLs that needs to be visited.  The list has all the URLs that been visited.  
