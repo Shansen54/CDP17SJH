@@ -47,9 +47,9 @@ public class Challenge6 {
 		for (int i = 1; i < allUrls.size(); i++){
 			webEle = allUrls.get(i);
 			currentUrl = webEle.getAttribute("href");  //https://stackoverflow.com/questions/20579007/get-href-value-webdriver
+//			System.out.println("CurrentUrl " + currentUrl );
 
-		if (!alreadyCrawledUrls.contains(currentUrl)){
-			 alreadyCrawledUrls.add(currentUrl);
+		if (currentUrl.contains("https://www.skiutah.com") && !alreadyCrawledUrls.contains(currentUrl)){
 			foundOnPage.add(currentUrl);
 			// once this for loop is done, you are back in the while loop and the next URL in the queue is polled.  
 		}
@@ -61,16 +61,20 @@ public class Challenge6 {
 	private static void processUrl(WebDriverWait wait, FirefoxDriver driver) {
 
 		System.out.println("foundOnPage size is now ********** " + foundOnPage.size());
-		System.out.println("foundOnPage - " + foundOnPage);
-		thisUrl = foundOnPage.peek();
-		if (!thisUrl.contains(homePage)) {
-			thisUrl = foundOnPage.poll();
+		thisUrl = foundOnPage.poll();
+		System.out.println("Checking this Url - " + thisUrl);
+		
+		if (alreadyCrawledUrls.contains(thisUrl)) {
+			foundOnPage.remove(thisUrl);
 			processUrl(wait,driver);
-			}
-		if(thisUrl.contains("https://www.skiutah.com") && !alreadyCrawledUrls.contains(thisUrl)) {
+		}
+			
+		if(!alreadyCrawledUrls.contains(thisUrl)) {
 			driver.get(thisUrl);
-			System.out.println("Checking this Url - " + thisUrl);
+			System.out.println("Should be on this Url - " + thisUrl);
 			addUrls(wait,driver);
+			alreadyCrawledUrls.add(thisUrl);
+			System.out.println("Already Crawled Urls size " + alreadyCrawledUrls.size() );
 		
 //				Actions action = new Actions(driver);
 //				action.moveToElement(webEle).build().perform();
@@ -93,7 +97,6 @@ public class Challenge6 {
 //						e1.printStackTrace();
 //						}
 				
-				alreadyCrawledUrls.add(thisUrl);
 				System.out.println("I just added - " + thisUrl + " to alreadyCrawledURLs");
 				foundOnPage.remove(thisUrl);
 				System.out.println("foundOnPage has " + foundOnPage.size() + " links in it." );
