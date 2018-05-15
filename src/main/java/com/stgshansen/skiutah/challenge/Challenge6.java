@@ -33,6 +33,7 @@ public class Challenge6 {
 			System.out.println("foundOnPage is now " + foundOnPage.size() + " size");
 
 			addUrls(wait, driver);
+			foundOnPage.remove(thisUrl);
 //			processUrl(wait, driver);
 	    }
 	    
@@ -43,20 +44,24 @@ public class Challenge6 {
 	 }
 
 	private static void addUrls(WebDriverWait wait, FirefoxDriver driver) {
-  
+		driver.get(thisUrl);
+
 		List<WebElement> allUrls = driver.findElements(By.tagName("a"));
 		System.out.println("there are a total of " +allUrls.size() +" on " + thisUrl);
 		for (int i = 1; i < allUrls.size(); i++){
 			webEle = allUrls.get(i);
 			currentUrl = webEle.getAttribute("href");  //https://stackoverflow.com/questions/20579007/get-href-value-webdriver
 
-		if (currentUrl.contains("https://www.skiutah.com/") && !alreadyCrawledUrls.contains(currentUrl)){
-			foundOnPage.add(currentUrl);
+			if ((currentUrl!=null) && currentUrl.contains("https://www.skiutah.com/") && !alreadyCrawledUrls.contains(currentUrl)){
+			if (!foundOnPage.contains(currentUrl)) {
+				foundOnPage.add(currentUrl);
+			}
 			// once this for loop is done, you are back in the while loop and the next URL in the queue is polled.  
 		}
 		}
 		alreadyCrawledUrls.add(thisUrl);
 		foundOnPage.removeAll(alreadyCrawledUrls);
+
 	
 	}
 }
