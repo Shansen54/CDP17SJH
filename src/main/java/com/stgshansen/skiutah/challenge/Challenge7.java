@@ -14,9 +14,9 @@ public class Challenge7 {
 
 	static String homePage = "https://www.skiutah.com/";
 	static PriorityQueue<String> foundOnPage = new PriorityQueue<String>();
-	static String thisUrl, currentUrl = "";
+	static String thisUrl, currentUrl, allText = "";
 	static ArrayList <String> alreadyCrawledUrls = new ArrayList <String>();
-	static WebElement webEle = null;
+	static WebElement webEle, pageBody = null;
 	static HashSet <WebElement> allUrls = new HashSet<WebElement>();
 	
 	public static void main(String[] args) throws Exception {
@@ -71,6 +71,9 @@ private static void processText(WebDriverWait wait, FirefoxDriver driver) {
 //		Send the completed list or document to Matt at the end.
 	
 		System.out.println("Collecting words from this Url - " + thisUrl);
+		pageBody = driver.findElementByTagName("body");
+		allText = pageBody.getText();
+		System.out.println("The words on this page - " + allText); // change to only getting unique words on page.
 		
 			
 
