@@ -30,16 +30,13 @@ public class Challenge6 {
 	    alreadyCrawledUrls.add(homePage);
 		
 	    while ((thisUrl = foundOnPage.poll()) != null) {
-			System.out.println("foundOnPage is now " + foundOnPage.size() + " size");
+			System.out.println("The foundOnPage queue has " + foundOnPage.size() + " links to check.");
 
 			addUrls(wait, driver);
 			foundOnPage.remove(thisUrl);
-//			processUrl(wait, driver);
 	    }
 	    
-		System.out.println("alreadyCrawledURLs has " + alreadyCrawledUrls.size() + " links in it." );
-		System.out.println("alreadyCrawledURLs - " + alreadyCrawledUrls );
-		System.out.println("foundOnPage - " + foundOnPage );
+		System.out.println("alreadyCrawledURLs has " + alreadyCrawledUrls.size() + " total links in it." );
 	    driver.close();
 	 }
 
@@ -47,7 +44,7 @@ public class Challenge6 {
 		driver.get(thisUrl);
 
 		List<WebElement> allUrls = driver.findElements(By.tagName("a"));
-		System.out.println("there are a total of " +allUrls.size() +" on " + thisUrl);
+		System.out.println("There are " +allUrls.size() +" links on " + thisUrl);
 		for (int i = 1; i < allUrls.size(); i++){
 			webEle = allUrls.get(i);
 			currentUrl = webEle.getAttribute("href");  //https://stackoverflow.com/questions/20579007/get-href-value-webdriver
@@ -61,6 +58,7 @@ public class Challenge6 {
 		}
 		alreadyCrawledUrls.add(thisUrl);
 		foundOnPage.removeAll(alreadyCrawledUrls);
+		System.out.println("Have crawled  " + alreadyCrawledUrls.size() + " pages so far");
 
 	
 	}
